@@ -2,6 +2,11 @@
 
 > A spec-compliant as much as it could be, small, and tested ES6 Symbol implementation.
 
+[![NPM version](https://badge.fury.io/js/es-symbol.svg)](http://badge.fury.io/js/es-symbol)
+[![Build Status](https://secure.travis-ci.org/goatslacker/es-symbol.svg)](http://travis-ci.org/goatslacker/es-symbol)
+[![Coverage Status](https://img.shields.io/coveralls/goatslacker/es-symbol.svg?style=flat)](https://coveralls.io/r/goatslacker/es-symbol)
+[![Dependency Status](https://david-dm.org/goatslacker/es-symbol.svg)](https://david-dm.org/goatslacker/es-symbol)
+
 * No unnecessary dependencies
 * Works in node + browser
 * Uses native `Symbol` if possible otherwise exports a polyfill

@@ -163,6 +163,22 @@ var tests = {
     } catch (e) {
       return e instanceof TypeError
     }
+  },
+
+  'you can rewrite symbols in instances'() {
+    var priv = Symbol()
+
+    function X() {
+      this[priv] = true
+    }
+
+    var x = new X()
+
+    var passed = x[priv] === true
+
+    x[priv] = false
+
+    return passed &= x[priv] === false
   }
 }
 
@@ -185,3 +201,4 @@ t('keys do not collide')
 t('you cant naively guess the keys')
 t('symbol is not an instance of itself')
 t('broken use of keyFor')
+t('you can rewrite symbols in instances')

@@ -32,7 +32,7 @@ let uid = (desc) => {
   defProp(Object.prototype, tag, {
     get: undefined,
     set: function (value) {
-      defProp(this, tag, defValue(value))
+      defProp(this, tag, defValue(value, { c: true, w: true }))
     },
     configurable: true,
     enumerable: false

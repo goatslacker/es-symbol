@@ -1,6 +1,6 @@
 {
   "name": "es-symbol",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A spec-compliant as much as it could be, small, and tested ES6 Symbol implementation.",
   "main": "dist/symbol.js",
   "devDependencies": {

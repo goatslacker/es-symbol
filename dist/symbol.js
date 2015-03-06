@@ -70,6 +70,11 @@ function xSymbol(descString) {
 
   var tag = uid(descString);
 
+  /* istanbul ignore next */
+  if (!supportsAccessors) {
+    return tag;
+  }
+
   return make(SymbolProto, {
     __description__: defValue(descString),
     __tag__: defValue(tag)

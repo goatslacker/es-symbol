@@ -1,12 +1,12 @@
 'use strict'
 
-let globalSymbolRegistryList = {}
+const globalSymbolRegistryList = {}
 
 // Aliases & Helpers
-let make = Object.create
-let defProps = Object.defineProperties
-let defProp = Object.defineProperty
-let defValue = (value, opts = {}) => {
+const make = Object.create
+const defProps = Object.defineProperties
+const defProp = Object.defineProperty
+const defValue = (value, opts = {}) => {
   return {
     value,
     configurable: !!opts.c,
@@ -14,19 +14,19 @@ let defValue = (value, opts = {}) => {
     enumerable: !!opts.e
   }
 }
-let isSymbol = (symbol) => {
+const isSymbol = (symbol) => {
   return symbol && symbol[xSymbol.toStringTag] === 'Symbol'
 }
 
-let id = {}
-let uid = (desc) => {
+const id = {}
+const uid = (desc) => {
   desc = String(desc)
   let x = ''
   let i = 0
   while (id[desc + x]) { x = i += 1 }
   id[desc + x] = 1
 
-  let tag = `Symbol(${desc}${x})`
+  const tag = `Symbol(${desc}${x})`
 
   // Make the symbols hidden to pre-es6 code
   defProp(Object.prototype, tag, {
@@ -42,7 +42,7 @@ let uid = (desc) => {
 }
 
 // The base symbol
-let SymbolProto = make(null)
+const SymbolProto = make(null)
 
 // 19.4.1.1
 function xSymbol(descString) {
@@ -52,7 +52,7 @@ function xSymbol(descString) {
 
   descString = descString === undefined ? '' : String(descString)
 
-  let tag = uid(descString)
+  const tag = uid(descString)
 
   return make(SymbolProto, {
     __description__: defValue(descString),
@@ -63,13 +63,13 @@ function xSymbol(descString) {
 defProps(xSymbol, {
   // 19.4.2.1
   for: defValue((key) => {
-    let stringKey = String(key)
+    const stringKey = String(key)
 
     if (globalSymbolRegistryList[stringKey]) {
       return globalSymbolRegistryList[stringKey]
     }
 
-    let symbol = xSymbol(stringKey)
+    const symbol = xSymbol(stringKey)
     globalSymbolRegistryList[stringKey] = symbol
 
     return symbol

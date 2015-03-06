@@ -18,6 +18,14 @@ const isSymbol = (symbol) => {
   return symbol && symbol[xSymbol.toStringTag] === 'Symbol'
 }
 
+let supportsAccessors;
+try {
+  const x = defProp({}, 'y', { get: function () { return 1 } })
+  supportsAccessors = x.y === 1
+} catch (e) {
+  supportsAccessors = false;
+}
+
 const id = {}
 const uid = (desc) => {
   desc = String(desc)
@@ -28,15 +36,18 @@ const uid = (desc) => {
 
   const tag = `Symbol(${desc}${x})`
 
-  // Make the symbols hidden to pre-es6 code
-  defProp(Object.prototype, tag, {
-    get: undefined,
-    set: function (value) {
-      defProp(this, tag, defValue(value, { c: true, w: true }))
-    },
-    configurable: true,
-    enumerable: false
-  })
+  /* istanbul ignore else */
+  if (supportsAccessors) {
+    // Make the symbols hidden to pre-es6 code
+    defProp(Object.prototype, tag, {
+      get: undefined,
+      set: function (value) {
+        defProp(this, tag, defValue(value, { c: true, w: true }))
+      },
+      configurable: true,
+      enumerable: false
+    })
+  }
 
   return tag
 }
@@ -119,14 +130,10 @@ defProps(SymbolProto, {
   })
 })
 
-defProps(SymbolProto, {
-  // 19.4.3.4 XXX Does not follow spec.
-  [xSymbol.toPrimitive]: defValue(function (hint) {
-    return this
-  }, { c: true }),
-
-  // 19.4.3.5
-  [xSymbol.toStringTag]: defValue('Symbol', { c: true })
-})
+// 19.4.3.5
+/* istanbul ignore else */
+if (supportsAccessors) {
+  defProp(SymbolProto, xSymbol.toStringTag, defValue('Symbol', { c: true }))
+}
 
 export default typeof Symbol === 'function' ? Symbol : xSymbol

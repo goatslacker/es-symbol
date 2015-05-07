@@ -93,13 +93,15 @@ defProps(xSymbol, {
 
   // 19.4.2.5
   keyFor: defValue((sym) => {
-    if (!isSymbol(sym)) {
+    if (supportsAccessors && !isSymbol(sym)) {
       throw new TypeError(`${sym} is not a symbol`)
     }
 
     for (let key in globalSymbolRegistryList) {
       if (globalSymbolRegistryList[key] === sym) {
-        return globalSymbolRegistryList[key].__description__
+        return supportsAccessors
+          ? globalSymbolRegistryList[key].__description__
+          : globalSymbolRegistryList[key].substr(7, globalSymbolRegistryList[key].length - 8)
       }
     }
   })

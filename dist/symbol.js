@@ -8,6 +8,7 @@ var defProps = Object.defineProperties;
 var defProp = Object.defineProperty;
 var defValue = function (value) {
   var opts = arguments[1] === undefined ? {} : arguments[1];
+
   return {
     value: value,
     configurable: !!opts.c,
@@ -21,7 +22,7 @@ var isSymbol = function (symbol) {
 
 var supportsAccessors = undefined;
 try {
-  var x = defProp({}, "y", { get: function () {
+  var x = defProp({}, "y", { get: function get() {
       return 1;
     } });
   supportsAccessors = x.y === 1;
@@ -46,7 +47,7 @@ var uid = function (desc) {
     // Make the symbols hidden to pre-es6 code
     defProp(Object.prototype, tag, {
       get: undefined,
-      set: function (value) {
+      set: function set(value) {
         defProp(this, tag, defValue(value, { c: true, w: true }));
       },
       configurable: true,
@@ -98,13 +99,13 @@ defProps(xSymbol, {
 
   // 19.4.2.5
   keyFor: defValue(function (sym) {
-    if (!isSymbol(sym)) {
+    if (supportsAccessors && !isSymbol(sym)) {
       throw new TypeError("" + sym + " is not a symbol");
     }
 
     for (var key in globalSymbolRegistryList) {
       if (globalSymbolRegistryList[key] === sym) {
-        return globalSymbolRegistryList[key].__description__;
+        return supportsAccessors ? globalSymbolRegistryList[key].__description__ : globalSymbolRegistryList[key].substr(7, globalSymbolRegistryList[key].length - 7 - 1);
       }
     }
   })
